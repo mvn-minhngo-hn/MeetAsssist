@@ -10,7 +10,7 @@
     "react",
     "react-hooks",
     "@typescript-eslint",
-    "prettier"
+    "eslint-plugin-config-prettier"
   ],
   "extends": [
     "eslint:recommended",
@@ -24,13 +24,7 @@
     "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-explicit-any": "warn",
-    "prettier/prettier": "error"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+    "prettier/prettier": "off"
   },
   "ignorePatterns": ["dist", ".vite", "node_modules"]
 }
-

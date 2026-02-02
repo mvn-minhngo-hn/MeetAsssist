@@ -154,7 +154,7 @@ async function callGLMAPI(systemPrompt: string, transcript: string, apiKey: stri
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'glm-4',
+      model: 'glm-4-5-air',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: transcript },
