@@ -6,8 +6,11 @@ import SummaryTab from './components/SummaryTab';
 import ActionItemsTab from './components/ActionItemsTab';
 import SuggestionsTab from './components/SuggestionsTab';
 import BottomActionBar from './components/BottomActionBar';
+import HistoryDashboard from './pages/HistoryDashboard';
+import MeetingDetail from './components/MeetingDetail';
 
 type TabType = 'summary' | 'actions' | 'suggestions';
+type AppMode = 'capture' | 'history' | 'detail';
 
 export default function App() {
   const {
@@ -20,9 +23,14 @@ export default function App() {
     suggestions,
     startCapture,
     stopCapture,
+    meetings,
+    categories,
   } = useExtensionStore();
 
+  const [mode, setMode] = useState<AppMode>('capture');
   const [activeTab, setActiveTab] = useState<TabType>('summary');
+  const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
+
   // Listen for messages from background script
   useEffect(() => {
     const messageListener = (message: any) => {
@@ -63,6 +71,17 @@ export default function App() {
     }
   };
 
+  // Handle meeting selection from history
+  const handleViewMeeting = (meeting: Meeting) => {
+    setSelectedMeeting(meeting);
+    setMode('detail');
+  };
+
+  const handleBackFromDetail = () => {
+    setSelectedMeeting(null);
+    setMode('history');
+  };
+
   return (
     <div className="h-screen w-[320px] flex flex-col bg-background">
       {/* Top Bar - Sticky Header */}
@@ -71,31 +90,67 @@ export default function App() {
         context={context}
         aiProvider={aiProvider}
         onToggleCapture={handleToggleCapture}
+        mode={mode}
+        onModeChange={setMode}
       />
 
-      {/* Tab Navigator */}
-      <TabNavigator activeTab={activeTab} onTabChange={setActiveTab} />
+      {/* Main Content */}
+      {mode === 'detail' && selectedMeeting ? (
+        <MeetingDetail
+          meeting={selectedMeeting}
+          onBack={handleBackFromDetail}
+        />
+      ) : mode === 'capture' ? (
+        <>
+          {/* Tab Navigator */}
+          <TabNavigator activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Content Area - Scrollable */}
-      <div className="flex-1 overflow-y-auto">
-        {activeTab === 'summary' && (
-          <SummaryTab
-            summary={currentSummary}
-            transcriptLength={transcript.length}
-            isCapturing={isCapturing}
-          />
-        )}
-        {activeTab === 'actions' && (
-          <ActionItemsTab items={actionItems} />
-        )}
-        {activeTab === 'suggestions' && (
-          <SuggestionsTab suggestions={suggestions} />
-        )}
-      </div>
+          {/* Content Area - Scrollable */}
+          <div className="flex-1 overflow-y-auto">
+            {activeTab === 'summary' && (
+              <SummaryTab
+                summary={currentSummary}
+                transcriptLength={transcript.length}
+                isCapturing={isCapturing}
+              />
+            )}
+            {activeTab === 'actions' && (
+              <ActionItemsTab items={actionItems} />
+            )}
+            {activeTab === 'suggestions' && (
+              <SuggestionsTab suggestions={suggestions} />
+            )}
+          </div>
 
-      {/* Bottom Bar - Action Buttons */}
-      <BottomActionBar isCapturing={isCapturing} />
+          {/* Bottom Bar - Action Buttons */}
+          <BottomActionBar isCapturing={isCapturing} />
+        </>
+      ) : (
+        <>
+          {/* Tab Navigator */}
+          <TabNavigator activeTab={activeTab} onTabChange={setActiveTab} />
+
+          {/* Content Area - Scrollable */}
+          <div className="flex-1 overflow-y-auto">
+            {activeTab === 'summary' && (
+              <SummaryTab
+                summary={currentSummary}
+                transcriptLength={transcript.length}
+                isCapturing={isCapturing}
+              />
+            )}
+            {activeTab === 'actions' && (
+              <ActionItemsTab items={actionItems} />
+            )}
+            {activeTab === 'suggestions' && (
+              <SuggestionsTab suggestions={suggestions} />
+            )}
+          </div>
+
+          {/* Bottom Bar - Action Buttons */}
+          <BottomActionBar isCapturing={isCapturing} />
+        </>
+      )}
     </div>
   );
 }
-

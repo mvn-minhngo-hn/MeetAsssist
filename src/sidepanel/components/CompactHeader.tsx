@@ -9,6 +9,8 @@ interface CompactHeaderProps {
   context: 'technical' | 'business' | 'general';
   aiProvider: 'glm' | 'openai' | 'gemini';
   onToggleCapture: () => void;
+  mode?: 'capture' | 'history';
+  onModeChange?: (mode: 'capture' | 'history') => void;
 }
 
 export default function CompactHeader({
@@ -16,6 +18,8 @@ export default function CompactHeader({
   context,
   aiProvider,
   onToggleCapture,
+  mode,
+  onModeChange,
 }: CompactHeaderProps) {
   return (
     <div className="sticky top-0 z-10 bg-background border-b border-border h-[50px] flex items-center justify-between px-3 shadow-sm">
@@ -25,28 +29,30 @@ export default function CompactHeader({
       {/* Center: AI Provider Badge */}
       <AIProviderSelector provider={aiProvider} />
 
-      {/* Right: User & Controls */}
-      <div className="flex items-center gap-2">
-        <LoginButton />
-        <Button
-          onClick={onToggleCapture}
-          variant={isCapturing ? 'destructive' : 'default'}
-          size="sm"
-          className="gap-1"
-        >
-          {isCapturing ? (
-            <>
-              <MicOff className="w-4 h-4" />
-              Stop
-            </>
-          ) : (
-            <>
-              <Mic className="w-4 h-4" />
-              Start
-            </>
-          )}
-        </Button>
-      </div>
+      {/* Right: User & Controls - Hide in history mode */}
+      {mode === 'capture' && (
+        <div className="flex items-center gap-2">
+          <LoginButton />
+          <Button
+            onClick={onToggleCapture}
+            variant={isCapturing ? 'destructive' : 'default'}
+            size="sm"
+            className="gap-1"
+          >
+            {isCapturing ? (
+              <>
+                <MicOff className="w-4 h-4" />
+                Stop
+              </>
+            ) : (
+              <>
+                <Mic className="w-4 h-4" />
+                Start
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
