@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Edit2, Share2, Trash2, Download, CheckSquare2, Lightbulb, Copy } from 'lucide-react';
+import { ArrowLeft, Edit2, Share2, Trash2, Download, CheckSquare2, Lightbulb, Copy, Calendar, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { Meeting, ActionItem } from '@/types';

@@ -145,7 +145,7 @@ async function callAIProvider(options: {
   }
 }
 
-// Call GLM-4 API
+// Call GLM API
 async function callGLMAPI(systemPrompt: string, transcript: string, apiKey: string): Promise<string> {
   const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
     method: 'POST',
@@ -154,7 +154,7 @@ async function callGLMAPI(systemPrompt: string, transcript: string, apiKey: stri
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'glm-4-5-air',
+      model: 'glm-4.5v',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: transcript },

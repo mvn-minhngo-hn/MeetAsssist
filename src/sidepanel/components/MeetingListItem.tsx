@@ -19,7 +19,7 @@ export default function MeetingListItem({ meeting, onView, onDelete, onToggleFav
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}p ${remainingSeconds}s`;
+    return `${minutes}m ${remainingSeconds}s`;
   };
 
   const contextBadgeColors = {
@@ -74,9 +74,8 @@ export default function MeetingListItem({ meeting, onView, onDelete, onToggleFav
               <span className="w-3 h-3 rounded-full bg-primary/20 flex items-center justify-center">
                 {meeting.actionItems?.filter((item) => !item.completed).length || 0}
               </span>
-              </span>
-              pending
-            </div>
+            </span>
+            pending
           </div>
         </div>
 
@@ -91,36 +90,35 @@ export default function MeetingListItem({ meeting, onView, onDelete, onToggleFav
             <MoreVertical className="w-3 h-3" />
           </Button>
         </div>
-      </div>
 
-      {/* Hover Actions */}
-      {onToggleFavorite && (
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite(meeting.id);
-            }}
-            className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
-          >
-            <Star className="w-3 h-3" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(meeting.id);
-            }}
-            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
-          >
-            <Trash2 className="w-3 h-3" />
-          </Button>
-        </div>
-      )}
+        {/* Hover Actions */}
+        {onToggleFavorite && (
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleFavorite(meeting.id);
+              }}
+              className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+            >
+              <Star className="w-3 h-3" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(meeting.id);
+              }}
+              className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
