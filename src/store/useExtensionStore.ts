@@ -29,8 +29,10 @@ interface ExtensionState {
   // Content
   transcript: CaptionChunk[];
   currentSummary: string;
+  cumulativeSummary: string; // Added for cumulative summaries
   actionItems: string[];
   suggestions: string[];
+  isGeneratingSummary: boolean; // Added for loading state
 
   // Actions
   startCapture: () => void;
@@ -42,6 +44,7 @@ interface ExtensionState {
   setAuthenticated: (isAuth: boolean) => void;
   addCaption: (chunk: CaptionChunk) => void;
   updateSummary: (summary: string) => void;
+  updateCumulativeSummary: (summary: string) => void; // Added
   setActionItems: (items: string[]) => void;
   setSuggestions: (suggestions: string[]) => void;
   clearSession: () => void;
@@ -51,6 +54,7 @@ interface ExtensionState {
   setIsSyncing: (syncing: boolean) => void;
   setLastSyncTime: (time: number | null) => void;
   setOfflineMode: (offline: boolean) => void;
+  setIsGeneratingSummary: (generating: boolean) => void; // Added
 }
 
 export const useExtensionStore = create<ExtensionState>((set) => ({
@@ -71,8 +75,10 @@ export const useExtensionStore = create<ExtensionState>((set) => ({
   selectedMeeting: null,
   transcript: [],
   currentSummary: '',
+  cumulativeSummary: '', // Added
   actionItems: [],
   suggestions: [],
+  isGeneratingSummary: false, // Added
 
   // Actions
   startCapture: () => set({
@@ -81,6 +87,7 @@ export const useExtensionStore = create<ExtensionState>((set) => ({
     startTime: Date.now(),
     transcript: [],
     currentSummary: '',
+    cumulativeSummary: '', // Reset cumulative summary
     actionItems: [],
     suggestions: [],
   }),
@@ -103,6 +110,8 @@ export const useExtensionStore = create<ExtensionState>((set) => ({
 
   updateSummary: (summary) => set({ currentSummary: summary }),
 
+  updateCumulativeSummary: (summary) => set({ cumulativeSummary: summary }), // Added
+
   setActionItems: (items) => set({ actionItems: items }),
 
   setSuggestions: (suggestions) => set({ suggestions }),
@@ -113,6 +122,7 @@ export const useExtensionStore = create<ExtensionState>((set) => ({
     startTime: null,
     transcript: [],
     currentSummary: '',
+    cumulativeSummary: '', // Reset cumulative summary
     actionItems: [],
     suggestions: [],
   }),
@@ -128,5 +138,7 @@ export const useExtensionStore = create<ExtensionState>((set) => ({
   setLastSyncTime: (time) => set({ lastSyncTime: time }),
 
   setOfflineMode: (offline) => set({ offlineMode: offline }),
+
+  setIsGeneratingSummary: (generating) => set({ isGeneratingSummary: generating }), // Added
 }));
 

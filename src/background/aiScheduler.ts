@@ -5,6 +5,7 @@ interface AIProcessingOptions {
   context: ContextType;
   aiProvider: AIProvider;
   apiKey: string;
+  previousSummary?: string; // Added for cumulative summaries
 }
 
 interface AIResult {
@@ -17,11 +18,11 @@ interface AIResult {
 
 // Main AI processing handler
 export async function handleAIProcessing(options: AIProcessingOptions): Promise<AIResult> {
-  const { captions, context, aiProvider, apiKey } = options;
+  const { captions, context, aiProvider, apiKey, previousSummary } = options;
 
   try {
     // Get system prompt based on context
-    const systemPrompt = getSystemPrompt(context);
+    const systemPrompt = getSystemPrompt(context, previousSummary);
 
     // Build transcript text from captions
     const transcript = captions
@@ -55,7 +56,11 @@ export async function handleAIProcessing(options: AIProcessingOptions): Promise<
 }
 
 // Get system prompt based on meeting context
-function getSystemPrompt(context: ContextType): string {
+function getSystemPrompt(context: ContextType, previousSummary?: string): string {
+  const cumulativeInstruction = previousSummary
+    ? `\n\nIMPORTANT: This is a cumulative summary update. Previous summary:\n"${previousSummary}"\n\nPlease merge the new transcript with the previous summary to create a complete, updated summary. Keep important information from the previous summary and integrate new information from the new transcript.`
+    : '';
+
   switch (context) {
     case 'technical':
       return `You are a helpful technical meeting assistant. Analyze the meeting transcript and provide:
@@ -72,6 +77,7 @@ function getSystemPrompt(context: ContextType): string {
 2. Suggested solutions (in Vietnamese) for any technical blockers or challenges mentioned.
 
 3. Action items (in Vietnamese) for technical tasks.
+${cumulativeInstruction}
 
 Format your response as JSON with the following structure:
 {
@@ -94,6 +100,7 @@ Format your response as JSON with the following structure:
 2. Suggested solutions (in Vietnamese) for business challenges.
 
 3. Action items (in Vietnamese) for business tasks and follow-ups.
+${cumulativeInstruction}
 
 Format your response as JSON with the following structure:
 {
@@ -114,6 +121,7 @@ Format your response as JSON with the following structure:
 2. Action items (in Vietnamese) for follow-up tasks.
 
 3. Any suggestions (in Vietnamese) for improvements or solutions.
+${cumulativeInstruction}
 
 Format your response as JSON with the following structure:
 {

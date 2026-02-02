@@ -27,6 +27,10 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendRes
       handleStopCapture(sender.tab?.id);
       break;
 
+    case 'GENERATE_SUMMARY':
+      handleGenerateSummary(message.payload);
+      break;
+
     case 'SEND_EMAIL':
       handleSendEmail(message.payload, sendResponse);
       return true; // Keep message channel open for async response
@@ -113,6 +117,64 @@ function handleStopCapture(tabId?: number) {
       console.error('[MeetAssist] Error sending stop capture command:', error);
     });
   }
+}
+
+// Handle generate summary command from side panel (manual on-demand summary)
+async function handleGenerateSummary(payload: {
+  sessionId: string;
+  captions: CaptionChunk[];
+  previousSummary?: string;
+}) {
+  console.log('[MeetAssist] Generating summary for session:', payload.sessionId);
+
+  // Get settings from storage
+  chrome.storage.local.get(['context', 'aiProvider', 'apiKey'], async (result) => {
+    const { context = 'technical', aiProvider = 'glm', apiKey } = result;
+
+    if (!apiKey) {
+      sendMessageToSidePanel({
+        type: 'CAPTION_ERROR',
+        payload: { error: 'API key not configured. Please add your API key in settings.' },
+      });
+      return;
+    }
+
+    // Process captions with AI (including previous summary for cumulative updates)
+    const aiResult = await handleAIProcessing({
+      captions: payload.captions,
+      context,
+      aiProvider,
+      apiKey,
+      previousSummary: payload.previousSummary,
+    });
+
+    if (aiResult.success) {
+      // Send updates to side panel
+      sendMessageToSidePanel({
+        type: 'CUMULATIVE_SUMMARY_UPDATE',
+        payload: aiResult.summary,
+      });
+
+      if (aiResult.suggestions && aiResult.suggestions.length > 0) {
+        sendMessageToSidePanel({
+          type: 'SUGGESTION_UPDATE',
+          payload: aiResult.suggestions,
+        });
+      }
+
+      if (aiResult.actionItems && aiResult.actionItems.length > 0) {
+        sendMessageToSidePanel({
+          type: 'ACTION_ITEMS_UPDATE',
+          payload: aiResult.actionItems,
+        });
+      }
+    } else {
+      sendMessageToSidePanel({
+        type: 'CAPTION_ERROR',
+        payload: { error: aiResult.error || 'AI processing failed' },
+      });
+    }
+  });
 }
 
 // Handle send email command from side panel

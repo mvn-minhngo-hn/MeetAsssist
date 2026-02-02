@@ -59,9 +59,12 @@ export type MessageType =
   | 'CAPTION_STREAM_STOPPED'
   | 'START_CAPTURE'
   | 'STOP_CAPTURE'
+  | 'GENERATE_SUMMARY'
   | 'SEND_EMAIL'
   | 'SUMMARY_UPDATE'
+  | 'CUMULATIVE_SUMMARY_UPDATE'
   | 'SUGGESTION_UPDATE'
+  | 'ACTION_ITEMS_UPDATE'
   | 'CAPTION_ERROR';
 
 export interface ExtensionMessage {

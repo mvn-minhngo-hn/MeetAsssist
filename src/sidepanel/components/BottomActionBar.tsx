@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { ReactNode } from 'react';
 
 interface BottomActionBarProps {
   isCapturing: boolean;
+  children?: ReactNode;
 }
 
-export default function BottomActionBar({ isCapturing }: BottomActionBarProps) {
+export default function BottomActionBar({ isCapturing, children }: BottomActionBarProps) {
   const [selectedChannels, setSelectedChannels] = useState<string[]>(['email']);
 
   const channels = [
@@ -59,6 +61,9 @@ export default function BottomActionBar({ isCapturing }: BottomActionBarProps) {
           );
         })}
       </div>
+
+      {/* Custom Children (Generate Summary Button) */}
+      {children}
 
       {/* Send Button */}
       <Button

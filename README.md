@@ -72,18 +72,40 @@ Lưu ý: Thay `your_actual_glm_api_key_here` bằng API key thực của bạn t
 4. Dán API Key vào trường **API Key**
 5. Click **Save**
 
-### Step 5: Test AI Features
+### Step 5: Test AI Features (Manual Summary)
+
+MeetAssist hỗ trợ **Cumulative Summary** - Tóm tắt theo yêu cầu thủ công:
+
+**Cơ chế hoạt động:**
+- Bấm **"Start Capture"** để bắt đầu thu thập captions
+- Mỗi khi bấm **"Tạo Tóm Tắt"**, AI sẽ xử lý từ đầu cuộc trò chuyện đến thời điểm bấm
+- Nếu đã có summary trước đó → AI sẽ kết hợp với transcript mới để cập nhật
+- Summary được lưu lại và dùng làm base cho các lần bấm sau
+
+**Cách sử dụng:**
 
 1. Truy cập **https://meet.google.com/**
 2. Tạo cuộc họp (có thể test một mình)
 3. Bật **captions** (CC icon) → Chọn "English"
 4. Mở MeetAssist extension
 5. Click **"Start Capture"** (🔴)
-6. Nói chuyện vài câu
-7. Wait ~3-5 giây → AI sẽ xử lý và hiển thị:
-   - ✅ **Summary**: Tóm tắt tiếng Việt
+6. Nói chuyện vài câu (ví dụ: 0-1 phút)
+7. Click **"Tạo Tóm Tắt"** → AI sẽ xử lý và hiển thị:
+   - ✅ **Summary**: Tóm tắt tiếng Việt (0-1 phút)
    - ✅ **Actions**: Action items
    - ✅ **Suggestions**: Gợi ý solutions
+8. Tiếp tục nói chuyện (1-2 phút)
+9. Click **"Tạo Tóm Tắt"** lần nữa → AI sẽ kết hợp:
+   - Summary cũ (0-1 phút)
+   - Transcript mới (1-2 phút)
+   - → Output: Summary cập nhật (0-2 phút)
+10. Lặp lại bước 8-9 khi cần
+
+**Lợi ích:**
+- 🎯 **Chủ động hoàn toàn**: Bạn quyết định khi nào muốn AI xử lý
+- 🔄 **Cumulative Updates**: Mỗi lần bấm sẽ cập nhật summary toàn bộ
+- 💾 **Lưu lịch sử**: Mỗi lần generate là một version của summary
+- ⚡ **Tiết kiệm API**: Chỉ gọi AI khi bấm nút, không auto-call
 
 > 📖 **Xem hướng dẫn chi tiết hơn trong [TESTING.md](TESTING.md)**
 
