@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build outputs
+dist
+build
+.next
+out
+.vite
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache
+.cache
+.turbo
+
+# Misc
+coverage
+*.log
+.DS_Store
+Thumbs.db
+
+# Icons and assets that shouldn't be formatted
+public/icons/*
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.woff
+*.woff2
+
