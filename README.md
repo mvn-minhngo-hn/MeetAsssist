@@ -99,12 +99,3 @@ Each provider requires its own API key, which can be configured in the extension
 
 MIT
 
-## Roadmap
-
-- [ ] Phase 1: Foundation & Core Communication ✓
-- [ ] Phase 2: Context-Aware UI & Logic ✓
-- [ ] Phase 3: AI Integration & Solution Suggestions ✓
-- [ ] Phase 4: Multi-Channel Notification & Backend
-- [ ] Phase 5: Google Meet Optimized UI/UX Design ✓
-- [ ] Phase 6: Meeting History Management & Cloud Sync
-
